@@ -14,6 +14,7 @@ size_t GetRandomIndex(size_t min, size_t max) {
     static std::mt19937 generator(random_device());
     std::uniform_int_distribution<size_t> distribution(min, max);
 
+    
     return distribution(generator);
 }
 
