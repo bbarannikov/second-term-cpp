@@ -4,9 +4,9 @@
 #include <iostream>
 #include <random>
 
-constexpr size_t kSizeStep = 1000;
-constexpr size_t kTestsCount = 1000;
-constexpr size_t kInnerCount = 200; 
+const size_t kSizeStep = 1000;
+const size_t kTestsCount = 1000;
+const size_t kInnerCount = 200; 
 
 size_t GetRandomIndex(size_t min, size_t max) {
     static std::random_device random_device;
