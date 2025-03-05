@@ -138,7 +138,7 @@ void TestAverage(const std::string& filename, int* finder(int*, int*, int), bool
     std::ofstream file("Files_with_time/" + filename);
 
     for (size_t iter = 0; iter < tests_count; ++iter) {
-        std::cerr << "\titer = " << iter << "\n";
+        std::cout << "\titer = " << iter << "\n";
 
         size_t size = size_step * (iter + 1);
         int* array = GenerateArray(size, sorted);
@@ -169,7 +169,7 @@ void TestStrategy(const std::string& filename, int* finder(int*, int*, int), boo
     std::ofstream file("Files_with_time/" + filename);
 
     for (size_t iter = 0; iter < tests_count; ++iter) {
-        std::cerr << "\titer = " << iter << "\n";
+        std::cout << "\titer = " << iter << "\n";
 
         size_t size = size_step * (iter + 1);
         int* array = GenerateArray(size, sorted);
@@ -202,7 +202,7 @@ void TestStrategy(const std::string& filename, int* finder(int*, int*, int), boo
 void TestAverageSumm(const std::string& filename, std::pair<int*, int*> finder(int*, int*, int), bool sorted, size_t tests_count = kTestsCount, size_t inner_count = kInnerCount, size_t size_step = kSizeStep){
     std::ofstream file("Files_with_time/" + filename);
     for (size_t iter = 0; iter < tests_count; ++iter) {
-        std::cerr << "\titer = " << iter << "\n";
+        std::cout << "\titer = " << iter << "\n";
 
         size_t size = size_step * (iter + 1);
         int* array = GenerateArray(size, sorted);
@@ -227,7 +227,7 @@ void TestStrategyC(const std::string& filename, int* finder(int*, int*, int*, in
     std::ofstream file("Files_with_time/" + filename);
 
     for (size_t iter = 0; iter < tests_count; ++iter) {
-        std::cerr << "\titer = " << iter << "\n";
+        std::cout << "\titer = " << iter << "\n";
 
         size_t size = size_step * (iter + 1);
         int* array = GenerateArray(size, sorted);
@@ -263,31 +263,31 @@ void TestStrategyC(const std::string& filename, int* finder(int*, int*, int*, in
 }
 
 int main() {
-    // std::cerr << "Dummy algorithm, not find:\n";
+    // std::cout << "Dummy algorithm, not find:\n";
     // TestAverage("dummy_not-find.txt", FinderDummy, false, false);
 
-    // std::cerr << "Dummy algorithm, will find:\n";
+    // std::cout << "Dummy algorithm, will find:\n";
     // TestAverage("dummy_will-find.txt", FinderDummy, true, false);
 
-    // std::cerr << "Binary search algorithm, not find:\n";
+    // std::cout << "Binary search algorithm, not find:\n";
     // TestAverage("bs_not-find.txt", FinderBinarySearch, false, true);
 
-    // std::cerr << "Binary search algorithm, will find:\n";
+    // std::cout << "Binary search algorithm, will find:\n";
     // TestAverage("bs_will-find.txt", FinderBinarySearch, true, true);
 
-    // std::cerr << "Algoritm of find two in sorted array: \n";
+    // std::cout << "Algoritm of find two in sorted array: \n";
     // TestAverageSumm("not-sort-summ.txt", FinderSummOfTwo, false);
     
-    // std::cerr << "Algoritm of find two in not sorted array: \n";
+    // std::cout << "Algoritm of find two in not sorted array: \n";
     // TestAverageSumm("sort-summ.txt", FinderSummOfTwoSorted, true);
 
-    std::cerr << "Strategy A: \n";
+    std::cout << "Strategy A: \n";
     TestStrategy("strat-A.txt", FinderDummyStrategyA, true, false);
 
-    std::cerr << "Strategy B: \n";
+    std::cout << "Strategy B: \n";
     TestStrategy("strat-B.txt", FinderDummyStrategyB, true, false);
 
-    std::cerr << "Strategy C: \n";
+    std::cout << "Strategy C: \n";
     TestStrategyC("strat-C.txt", FinderDummyStrategyC, true, false);
     return 0;
 }
