@@ -1,4 +1,5 @@
 #include <chrono>
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <random>
@@ -9,16 +10,16 @@ const size_t kInnerCount = 20;
 const float ReductionFactorCombSort = 1.25;
 size_t counter = 0;
 
-using std::swap;
+// using std::swap;
 
-// template <typename T>
+template <typename T>
 
-// void swap(T& a, T& b) {
-//     T temp = a;
-//     a = b;
-//     b = temp;
-//     // ++counter;
-// }
+void swap(T& a, T& b) {
+    T temp = a;
+    a = b;
+    b = temp;
+    ++counter;
+}
 
 size_t GetRandomIndex(size_t min, size_t max) {
     static std::random_device random_device;
@@ -35,6 +36,18 @@ int* GenerateArray(size_t size) {
     }
 
     return array;
+}
+
+size_t Hibbard(size_t exponent) {
+    return pow(2, exponent) - 1;
+}
+
+size_t Fibbonachi(size_t number) {
+    if (number < 3) {
+        return 1;
+    } else {
+        return Fibbonachi(number - 1) + Fibbonachi(number - 2);
+    }
 }
 
 void ArrayOutPut(int* array, size_t size) {
@@ -137,6 +150,52 @@ void ShellaSort(int* array, size_t size) {
     }
 }
 
+void ShellaSortHibbard(int* array, size_t size) {
+    bool flag = true;
+    size_t k = 1;
+    while (Hibbard(k + 1) <= size) {
+        ++k;
+    }
+
+    while ((Hibbard(k) > 1) or flag) {
+        flag = false;
+
+        if (Hibbard(k) > 1){
+            --k;
+        }
+
+        for(size_t index1 = Hibbard(k); index1 < size; ++index1) {
+            for(size_t index2 = index1; index2 >= Hibbard(k) && *(array + index2) < *(array + index2 - Hibbard(k)) ; index2 -= Hibbard(k)) {
+                swap( *(array + index2), *(array +  index2 - Hibbard(k)));
+                flag = true;
+            }
+        }
+    }
+}
+
+void ShellaSortFibbonachi(int* array, size_t size) {
+    bool flag = true;
+    size_t k = 1;
+    while (Fibbonachi(k + 1) <= size) {
+        ++k;
+    }
+
+    while ((Fibbonachi(k) > 1) or flag) {
+        flag = false;
+
+        if (Fibbonachi(k) > 1){
+            --k;
+        }
+
+        for(size_t index1 = Fibbonachi(k); index1 < size; ++index1) {
+            for(size_t index2 = index1; index2 >= Fibbonachi(k) && *(array + index2) < *(array + index2 - Fibbonachi(k)) ; index2 -= Fibbonachi(k)) {
+                swap( *(array + index2), *(array +  index2 - Fibbonachi(k)));
+                flag = true;
+            }
+        }
+    }
+}
+
 bool TestSort(int* array, size_t size) {
     for (size_t index = 1; index < size; ++index) {
         if (*(array + index - 1) > *(array + index)) {
@@ -147,8 +206,8 @@ bool TestSort(int* array, size_t size) {
 }
 
 void TestAverage (std::string filename, void sorter(int*, size_t), size_t tests_count = kTestsCount, size_t inner_count = kInnerCount, size_t size_step = kSizeStep) {
-    std::ofstream file_1("Files_with_time/" + filename);
-    // std::ofstream file_2("Files_with_changes/" + filename);
+    // std::ofstream file_1("Files_with_time/" + filename);
+    std::ofstream file_2("Files_with_changes/" + filename);
 
     for(size_t iter = 0; iter < tests_count; ++iter) {
         counter = 0;
@@ -156,7 +215,7 @@ void TestAverage (std::string filename, void sorter(int*, size_t), size_t tests_
 
         size_t size = size_step * (iter + 1);
 
-        auto begin = std::chrono::steady_clock::now();
+        // auto begin = std::chrono::steady_clock::now();
 
         for(size_t _ = 0; _ < inner_count; ++_) {
             int* array = GenerateArray(size);
@@ -164,11 +223,11 @@ void TestAverage (std::string filename, void sorter(int*, size_t), size_t tests_
             delete array;
         }
 
-        auto end = std::chrono::steady_clock::now();
-        auto time_span = std::chrono::duration_cast<std::chrono::nanoseconds>((end - begin) / inner_count);
+        // auto end = std::chrono::steady_clock::now();
+        // auto time_span = std::chrono::duration_cast<std::chrono::nanoseconds>((end - begin) / inner_count);
 
-        file_1 << time_span.count() << "\n";
-        // file_2 << counter / inner_count << "\n";
+        // file_1 << time_span.count() << "\n";
+        file_2 << counter / inner_count << "\n";
     }
 }
 
@@ -182,17 +241,32 @@ int main() {
     // std::cout << "ShakerSort\n";
     // TestAverage("Shaker.txt", ShakerSort);
 
-    std::cout << "CombSort\n";
-    TestAverage("Comb_1_25.txt", CombSort);
+    // std::cout << "CombSort\n";
+    // TestAverage("Comb_2.txt", CombSort);
+    
+    // std::cout << "CombSort\n";
+    // TestAverage("Comb_1_75.txt", CombSort);
 
-    // std::cout << "ShellaSort\n";
-    // TestAverage("Shella.txt", ShellaSort);    
+    // std::cout << "CombSort\n";
+    // TestAverage("Comb_1_5.txt", CombSort);
+
+    // std::cout << "CombSort\n";
+    // TestAverage("Comb_1_25.txt", CombSort);
+
+    std::cout << "ShellaSort\n";
+    TestAverage("Shella.txt", ShellaSort);    
+
+    std::cout << "ShellaSortHibbard\n";
+    TestAverage("ShellaHibbard.txt", ShellaSortHibbard);    
+
+    std::cout << "ShellaSortFibbonachi\n";
+    TestAverage("ShellaFibbonachi.txt", ShellaSortFibbonachi);   
 
     // for (int index = 0; index < 1000; ++index) {
     //     int* array = GenerateArray(10000);
         
     //     // ArrayOutPut(array, 100);
-    //     ShellaSort(array, 10000);
+    //     ShellaSortFibbonachi(array, 10000);
     //     // ArrayOutPut(array, 100);
         
     //     if (!TestSort(array, 10000)){
